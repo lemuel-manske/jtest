@@ -15,3 +15,15 @@ test(() => {
     })
   );
 });
+
+test(() => {
+  let counter = 0;
+
+  test.beforeEach(() => {
+    counter++;
+  });
+
+  test(() => assert.equal(counter, 1));
+
+  test(() => assert.equal(counter, 2));
+});
