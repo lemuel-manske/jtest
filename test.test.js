@@ -31,3 +31,17 @@ test(() => {
 test("should pass", () => {
   test(() => assert.equal(1, 1));
 });
+
+test(() => {
+  let counter = 0;
+
+  test.beforeAll(() => {
+    counter++;
+  });
+
+  test(() => assert.equal(counter, 1));
+
+  test(() => assert.equal(counter, 1));
+
+  test(() => assert.equal(counter, 1));
+});

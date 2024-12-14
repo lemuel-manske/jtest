@@ -16,4 +16,8 @@ test.beforeEach = (beforeEachFn) => {
   hooks.beforeEach.push(beforeEachFn);
 };
 
+test.beforeAll = (beforeAllFn) => {
+  beforeAllFn();
+};
+
 export { test };
