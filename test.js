@@ -2,9 +2,14 @@ const hooks = {
   beforeEach: [],
 };
 
-const test = (testFn) => {
+const test = (testFnOrDesc, testOrUndef) => {
   hooks.beforeEach.forEach((fn) => fn.call());
-  testFn();
+
+  if (typeof testFnOrDesc === "string") {
+    return testOrUndef();
+  }
+
+  testFnOrDesc();
 };
 
 test.beforeEach = (beforeEachFn) => {

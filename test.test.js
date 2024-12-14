@@ -4,14 +4,14 @@ import { test } from "./test.js";
 
 test(() => {
   test(() => {
-    assert(1 === 1);
+    assert.equal(1, 1);
   });
 });
 
 test(() => {
   assert.throws(() =>
     test(() => {
-      assert(1 !== 1);
+      assert.notEqual(1, 1);
     })
   );
 });
@@ -26,4 +26,8 @@ test(() => {
   test(() => assert.equal(counter, 1));
 
   test(() => assert.equal(counter, 2));
+});
+
+test("should pass", () => {
+  test(() => assert.equal(1, 1));
 });
