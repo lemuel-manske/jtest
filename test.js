@@ -2,22 +2,37 @@ const hooks = {
   beforeEach: [],
 };
 
-const test = (testFnOrDesc, testOrUndef) => {
+const test = (desc, fn) => {
   hooks.beforeEach.forEach((fn) => fn.call());
 
-  if (typeof testFnOrDesc === "string") {
-    return testOrUndef();
+  if (typeof desc === "string") {
+    return fn();
   }
 
-  testFnOrDesc();
+  desc();
 };
 
-test.beforeEach = (beforeEachFn) => {
-  hooks.beforeEach.push(beforeEachFn);
+test.beforeEach = (fn) => {
+  hooks.beforeEach.push(fn);
 };
 
-test.beforeAll = (beforeAllFn) => {
-  beforeAllFn();
+test.beforeAll = (fn) => {
+  fn();
 };
 
-export { test };
+test.describe = (desc, fn) => {
+  if (typeof desc === "function") {
+    return desc();
+  }
+
+  fn();
+};
+
+const Test = {
+  beforeEach: test.beforeEach,
+  beforeAll: test.beforeAll,
+  describe: test.describe,
+  run: test,
+};
+
+export { Test as test };
