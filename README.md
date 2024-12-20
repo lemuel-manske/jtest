@@ -1,2 +1,3 @@
 # jtest
-A javascript test framework guided by tests
+
+A javascript test framework guided by tests.
