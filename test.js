@@ -1,38 +1,51 @@
-const hooks = {
-  beforeEach: [],
-};
+import Stack from "./stack.js";
+
+const groups = new Stack();
 
 const test = (desc, fn) => {
-  hooks.beforeEach.forEach((fn) => fn.call());
-
   if (typeof desc === "string") {
-    return fn();
+    groups.peek().hooks.tests.push(fn);
+    return;
   }
 
-  desc();
+  groups.peek().hooks.tests.push(desc);
 };
 
 test.beforeEach = (fn) => {
-  hooks.beforeEach.push(fn);
+  groups.peek().hooks.beforeEach.push(fn);
 };
 
 test.beforeAll = (fn) => {
-  fn();
+  groups.peek().hooks.beforeAll.push(fn);
 };
 
-test.describe = (desc, fn) => {
-  if (typeof desc === "function") {
-    return desc();
+test.group = (fn) => {
+  groups.push({
+    hooks: {
+      beforeEach: [],
+      beforeAll: [],
+      tests: [],
+    },
+    run: fn,
+  });
+};
+
+test.run = () => {
+  while (!groups.isEmpty()) {
+    const group = groups.peek();
+
+    group.run();
+
+    group.hooks.beforeAll.forEach((befAll) => befAll());
+
+    group.hooks.tests.forEach((test) => {
+      group.hooks.beforeEach.forEach((befEach) => befEach());
+
+      test();
+    });
+
+    groups.pop();
   }
-
-  fn();
 };
 
-const Test = {
-  beforeEach: test.beforeEach,
-  beforeAll: test.beforeAll,
-  describe: test.describe,
-  run: test,
-};
-
-export { Test as test };
+export { test };
